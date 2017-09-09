@@ -126,8 +126,9 @@ class Wechat{
             return false;
         }
     }
-    private function doText($postObj){
-            $keyword = trim($postObj->Content);
+    private function doText($postObj,$keyword){
+            isset($keyword)?$keyword:trim($postObj->Content);
+            //$keyword = trim($postObj->Content);
             if (!empty($keyword)) {
                 if($keyword=='图片'){
                     $MediaId='uW4ABoWPLlFPUF3KxnRDgzyykptAR3cJEIDiSVKYr-R0kRlhkAolX4x_sS7NLrGa';
@@ -159,9 +160,11 @@ class Wechat{
     	echo $resultStr;
     }
     private function doVoice($postObj){
-    	$MediaId=$postObj->MediaId;
+        $keyword=$postObj->Recognition;
+        $this->doText($postObj,$keyword);
+    	/*$MediaId=$postObj->MediaId;
     	$resultStr = sprintf($this->textTpl,$postObj->FromUserName,$postObj->ToUserName,time(),'text',"语音消息无法识别,MediaId:{$MediaId}");
-    	 echo $resultStr;
+    	 echo $resultStr;*/
     }
     private function doLocation($postObj){
     	$location=$postObj->Location_X.','.$postObj->Location_Y;
