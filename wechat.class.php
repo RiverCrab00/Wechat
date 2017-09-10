@@ -127,7 +127,7 @@ class Wechat{
         }
     }
     private function doText($postObj,$keyword){
-            isset($keyword)?$keyword:trim($postObj->Content);
+            $keyword=isset($keyword)?$keyword:trim($postObj->Content);
             //$keyword = trim($postObj->Content);
             if (!empty($keyword)) {
                 if($keyword=='图片'){
