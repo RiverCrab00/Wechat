@@ -131,7 +131,12 @@ class Wechat{
             //$keyword = trim($postObj->Content);
             if (!empty($keyword)) {
                 if($keyword=='图片'){
-                    $MediaId='uW4ABoWPLlFPUF3KxnRDgzyykptAR3cJEIDiSVKYr-R0kRlhkAolX4x_sS7NLrGa';
+                    $MediaId='E8slWa_GVs9DUTZjdgMbQNWC3zUfVGoPu3ebMLv0Pxf2tNreNlEF-jJd2QBPGMVM';
+                    $resultStr = sprintf($this->imageTpl,$postObj->FromUserName,$postObj->ToUserName,time(),$MediaId);
+                    echo $resultStr;
+                    die;
+                }elseif($keyword=='二维码'){
+                    $MediaId='IOCEE8li5wjf4QR446caUMnpRm5GlRfeFDgnMPqXFnQbs8wJHwNKkllZezMfrxcg';
                     $resultStr = sprintf($this->imageTpl,$postObj->FromUserName,$postObj->ToUserName,time(),$MediaId);
                     echo $resultStr;
                     die;
@@ -185,7 +190,7 @@ class Wechat{
     }
     private function sendMusic($postObj){
         $MusicUrl=$HQMusicUrl='http://47.94.23.12/wechat/intro.mp3';
-        $MediaId='M1ujBy98X_FUH_G3A7SD4cI94QrN4vkQ0UAvmwH5XG4rsPJa3zjJT6NJkM9SrRLm';
+        $MediaId='zRzVbpfQDdNTfdYT-y9cNBtPbSxD8DuHOriqorOEGmDlDrI-rRSrTqmjUzZhxXhT';
         $title='intro';
         $description='The xx';
         $resultStr = sprintf($this->musicTpl,$postObj->FromUserName,$postObj->ToUserName,time(),$title,$description,$MusicUrl,$HQMusicUrl,$MediaId);
@@ -249,7 +254,7 @@ class Wechat{
 	    	$content=$this->request($url);
 	    	$access_token=json_decode($content)->access_token;
 	    	//file_put_contents('./access_token.text',$access_token);
-	    	$mem->set('access_token',$access_token,0,7200);
+	    	$mem->set('access_token',$access_token,0,72000);
     	}
     	return $access_token;
     }
@@ -448,5 +453,20 @@ class Wechat{
             echo '错误信息为:'.$res->errmsg.'<br>';
         }
     }
-
+    public function add_image(){
+        //添加临时图片素材,返回media_id
+        $url='https://api.weixin.qq.com/cgi-bin/media/upload?access_token='.$this->getAccessToken().'&type=image';
+        $data=array(
+            'media'=>'@1504628394.jpg'
+        );
+        $content=$this->request($url,true,'post',$data);
+        var_dump(json_decode($content));
+    }
+    public function getImage(){
+        //获取临时图片素材;
+        $MediaId='IOCEE8li5wjf4QR446caUMnpRm5GlRfeFDgnMPqXFnQbs8wJHwNKkllZezMfrxcg';
+        $url='https://api.weixin.qq.com/cgi-bin/media/get/jssdk?access_token='.$this->getAccessToken().'&media_id='.$MediaId;
+        $content->request($url,true,'post');
+        echo file_put_contents(time().'.jpg',$content);
+    }
 }
